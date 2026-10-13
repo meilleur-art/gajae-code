@@ -414,6 +414,16 @@ describe("model thinking metadata", () => {
 });
 
 describe("generated model policies", () => {
+	it("normalizes negative and non-finite catalog prices without changing valid prices", () => {
+		const model = createModel({ id: "pareto-code", api: "openai-completions", provider: "openrouter" });
+		model.cost = { input: -1_000_000, output: 0.5, cacheRead: Number.NaN, cacheWrite: 0 };
+		const models = [model];
+
+		applyGeneratedModelPolicies(models);
+
+		expect(models[0]?.cost).toEqual({ input: 0, output: 0.5, cacheRead: 0, cacheWrite: 0 });
+	});
+
 	it("corrects stale direct xAI Grok reasoning metadata before enrichment", () => {
 		const models = [
 			createModel({ id: "grok-4.5", api: "openai-completions", provider: "xai", reasoning: false }),

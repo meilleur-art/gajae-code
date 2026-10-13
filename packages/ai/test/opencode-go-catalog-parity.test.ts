@@ -45,7 +45,11 @@ const LIVE_OPENCODE_GO_MODEL_IDS = [
 	"grok-4.7",
 	"muse-spark-1.2-contributor",
 	"muse-spark-1.3-contributor",
+	"cat-jam-free",
+	"claude-haiku-5-5",
+	"space-bunny",
 	"space-bunny-free",
+	"step-5-preview-free",
 	"union-alpha",
 ] as const;
 

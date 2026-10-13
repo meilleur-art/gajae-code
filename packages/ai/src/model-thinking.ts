@@ -328,6 +328,23 @@ export function modelSupportsReasoningControl<TApi extends Api>(
 export function applyGeneratedModelPolicies(models: ApiModel<Api>[]): void {
 	for (let index = 0; index < models.length; index++) {
 		const source = models[index]!;
+		const inputCost = nonNegativeFinitePrice(source.cost.input);
+		const outputCost = nonNegativeFinitePrice(source.cost.output);
+		const cacheReadCost = nonNegativeFinitePrice(source.cost.cacheRead);
+		const cacheWriteCost = nonNegativeFinitePrice(source.cost.cacheWrite);
+		if (
+			inputCost !== source.cost.input ||
+			outputCost !== source.cost.output ||
+			cacheReadCost !== source.cost.cacheRead ||
+			cacheWriteCost !== source.cost.cacheWrite
+		) {
+			source.cost = {
+				input: inputCost,
+				output: outputCost,
+				cacheRead: cacheReadCost,
+				cacheWrite: cacheWriteCost,
+			};
+		}
 		if (source.provider === "xai" && (source.id === "grok-4.5" || source.id === "grok-4.6")) {
 			source.reasoning = true;
 		}
@@ -357,6 +374,10 @@ export function applyGeneratedModelPolicies(models: ApiModel<Api>[]): void {
 		applyGeneratedModelPolicy(model);
 		models[index] = model;
 	}
+}
+
+function nonNegativeFinitePrice(value: number): number {
+	return Number.isFinite(value) && value >= 0 ? value : 0;
 }
 
 /**
@@ -1056,9 +1077,7 @@ function inferThinkingControlMode<TApi extends Api>(
 		case "google-generative-ai":
 		case "google-gemini-cli":
 		case "google-vertex":
-			return parsedModel.family === "gemini" && semverGte(parsedModel.version, "3.0")
-				? "google-level"
-				: "budget";
+			return parsedModel.family === "gemini" && semverGte(parsedModel.version, "3.0") ? "google-level" : "budget";
 
 		case "anthropic-messages":
 			if (parsedModel.family === "anthropic") {
