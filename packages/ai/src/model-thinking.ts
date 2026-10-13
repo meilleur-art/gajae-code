@@ -95,7 +95,7 @@ type SemVer = {
 	patch: number;
 };
 
-type GeminiKind = "pro" | "flash";
+type GeminiKind = "pro" | "flash" | "argon";
 type AnthropicKind = "opus" | "sonnet" | "fable";
 type OpenAIVariant =
 	| "astra"
@@ -979,6 +979,8 @@ function inferGeminiSupportedEfforts(model: GeminiModel): readonly Effort[] {
 	if (model.kind === "pro") {
 		return GEMINI_3_PRO_EFFORTS;
 	}
+	// Gemini 3.7+ Flash and Gemini 4 Argon accept low/medium/high only.
+	// https://ai.google.dev/gemini-api/docs/models/gemini-4-argon
 	if (semverGte(model.version, "3.7")) {
 		return GEMINI_3_7_FLASH_EFFORTS;
 	}
@@ -1054,9 +1056,7 @@ function inferThinkingControlMode<TApi extends Api>(
 		case "google-generative-ai":
 		case "google-gemini-cli":
 		case "google-vertex":
-			return parsedModel.family === "gemini" &&
-				semverGte(parsedModel.version, "3.0") &&
-				parsedModel.version.major === 3
+			return parsedModel.family === "gemini" && semverGte(parsedModel.version, "3.0")
 				? "google-level"
 				: "budget";
 
@@ -1104,7 +1104,7 @@ function parseGeminiModel(modelId: string): GeminiModel | null {
 	if (modelId.endsWith(GEMINI_SUFFIX)) {
 		modelId = modelId.slice(0, -GEMINI_SUFFIX.length);
 	}
-	const match = /gemini-(\d+(?:\.\d+){0,2})-(pro|flash)\b/.exec(modelId);
+	const match = /gemini-(\d+(?:\.\d+){0,2})-(pro|flash|argon)\b/.exec(modelId);
 	if (!match) {
 		return null;
 	}

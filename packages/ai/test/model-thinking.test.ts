@@ -279,6 +279,24 @@ describe("model thinking metadata", () => {
 		expect(requireSupportedEffort(flash36, Effort.Minimal)).toBe(Effort.Minimal);
 	});
 
+	it("sends thinkingLevel for Gemini 4 Argon with low/medium/high only", () => {
+		const argon = createModel({
+			id: "gemini-4-argon",
+			api: "google-generative-ai",
+			provider: "google",
+		});
+
+		expect(argon.thinking).toEqual({
+			mode: "google-level",
+			minLevel: Effort.Low,
+			maxLevel: Effort.High,
+		});
+		expect(mapEffortToGoogleThinkingLevel(argon, Effort.Low)).toBe("LOW");
+		expect(mapEffortToGoogleThinkingLevel(argon, Effort.Medium)).toBe("MEDIUM");
+		expect(mapEffortToGoogleThinkingLevel(argon, Effort.High)).toBe("HIGH");
+		expect(() => requireSupportedEffort(argon, Effort.Minimal)).toThrow(/not supported/);
+	});
+
 	it("encodes anthropic transport mode in metadata", () => {
 		const opus45 = createModel({
 			id: "claude-opus-4-5",

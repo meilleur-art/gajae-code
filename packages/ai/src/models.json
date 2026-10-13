@@ -18727,8 +18727,8 @@
 			"contextWindow": 1048576,
 			"maxTokens": 65536,
 			"thinking": {
-				"mode": "budget",
-				"minLevel": "minimal",
+				"mode": "google-level",
+				"minLevel": "low",
 				"maxLevel": "high"
 			}
 		},
@@ -72712,8 +72712,8 @@
 			"contextWindow": 1048576,
 			"maxTokens": 65536,
 			"thinking": {
-				"mode": "budget",
-				"minLevel": "minimal",
+				"mode": "google-level",
+				"minLevel": "low",
 				"maxLevel": "high"
 			}
 		},
@@ -78279,7 +78279,7 @@
 			"maxTokens": 65536,
 			"thinking": {
 				"mode": "effort",
-				"minLevel": "minimal",
+				"minLevel": "low",
 				"maxLevel": "high"
 			}
 		},
@@ -78304,7 +78304,7 @@
 			"maxTokens": 943718,
 			"thinking": {
 				"mode": "effort",
-				"minLevel": "minimal",
+				"minLevel": "low",
 				"maxLevel": "high"
 			}
 		},
@@ -95413,8 +95413,8 @@
 			"maxTokens": 1000000,
 			"thinking": {
 				"mode": "budget",
-				"minLevel": "minimal",
-				"maxLevel": "xhigh"
+				"minLevel": "low",
+				"maxLevel": "high"
 			}
 		},
 		"google/gemma-4-26b-a4b-it": {
